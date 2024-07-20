@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo</title>
+    <link href="./des/output.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+</head>
+<body class="flex flex-col min-h-screen m-0">
+    <nav id="myNav">
+        <p class="ml-4 md:ml-6">To do Notes</p> 
+        <div class="mr-4 text-base">  
+            
+            <button type="button" onclick="togalTheme()" class=" rounded-lg ml-4 hover:text-yellow-300 transition duration-300 ease-in-out"><i class="fa-solid fa-sun"></i></button>
+            <!-- <button type="button" onclick="resetAll()" class="shadow-inner shadow-white/30 rounded-lg px-2 ml-2 "><i class="fa-solid fa-broom"></i></button> -->
+            <button type="button" onclick="resetAll()" class=" justify-self-end rounded-lg ml-4 hover:text-red-500 transition duration-300 ease-in-out"><i class="fa-solid fa-broom"></i></button>
+            <a href="./about.html" ><button type="button" class="ml-4 underline underline-offset-2 hover:text-yellow-300 transition duration-300 ease-in-out"><i class="fa-solid fa-circle-info"></i></button></a>
+            <a href="./help.html" ><button type="button" class=" ml-4 underline underline-offset-2 hover:text-yellow-300 transition duration-300 ease-in-out"><i class="fa-solid fa-handshake-angle"></i></button></a>  
+        </div>
+    </nav>
+    <div class="todoCard flex flex-col flex-1 items-center mt-6">
+        <div class="todoItemUnchecked min-w-72 md:min-w-96 rounded-lg flex flex-col items-center shadow-inner shadow-white/10 bg-custom-transparent">
+            <div class="todoItem">
+                <!-- ctrl + space at any field will pop up all possible valid values that can be used ie:  type="" Ctrl+Space b/w "" will pop valid op -->
+                <input type="checkbox" id="i999998" onchange="handleCheckboxChange(this)">
+                <textarea data-for="i999998" placeholder="Enter description..." oninput="autoResize(this)"></textarea>
+                <!-- for="someID" not valid in btn , The data-for attribute is used on the <button> element to specify the associated checkbox ID.  elementRefer.getAttribute('data-for') to extract that id in js-->
+                <button type="button" class="delBtn" data-for="i999998" onclick="removeCurrentTodoItem(this)">
+                    <i class="fas fa-trash text-sm"></i>
+                </button>
+            </div>
+        </div>
+        <div class="todoItemChecked min-w-72 md:min-w-96 my-line-through rounded-lg mt-4 flex flex-col items-center bg-custom-green">
+        </div>
+        <button type="button" onclick="addNewTodoItem()" id="addNewItemBtn"
+        class="hover:border-b hover:border-yellow-400 transition duration-300 ease-in-out 
+        rounded-lg mt-2 px-4 py-2 text-white">
+            <i class="fa-solid fa-plus"></i>
+        </button>
+
+    </div>
+    <footer class="text-white text-center py-4 font-poppins-light">
+        <div class="space-x-4 pb-3">
+            <a href="./about.html" ><button type="button" class="underline underline-offset-2 hover:text-yellow-300 transition duration-300 ease-in-out">About</button></a>
+            <a href="./help.html" ><button type="button" class="underline underline-offset-2 hover:text-yellow-300 transition duration-300 ease-in-out">Help</button></a>
+        </div>
+        <p class="font-poppins-thin text-sm">&copy; 2024 Twilight Sols. All rights reserved.</p>
+    </footer>
+    
+    <script src="./index.js"></script>
+</body>
+
+</html>

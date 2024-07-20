@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+html{
+    @apply bg-gradient-to-r from-purple-950 to-fuchsia-900 font-poppins-regular;
+    /* scrollbar-color: rgba(255, 255, 255, 0.297) rgba(255, 166, 0, 0);
+    scrollbar-width: 1px !important;
+    scrollbar-arrow-color: rgb(247, 72, 8) !important; */
+}
+
+.delBtn{
+    @apply  rounded-lg px-2 text-zinc-50 mr-2 ml-3 grow-0 hover:text-red-500 transition duration-300 ease-in-out;
+}
+
+.todoCard input{
+    @apply accent-neutral-700 mx-3 mt-[5px] grow-0;
+}
+
+.todoItem{
+    @apply my-2 text-zinc-50 flex flex-row items-start w-full;
+}
+
+.todoCard textarea{
+
+    white-space: pre-wrap; /* This ensures the text wraps to a new line within the textarea */
+    overflow-wrap: break-word; /* This ensures long words break and wrap to the next line */
+    resize: none; /* This prevents the user from resizing the textarea */
+    min-height: fit-content; /* Adjust this value to set a minimum height */
+    max-height: 200px; /* Set the maximum height for the textarea */
+    overflow-y: auto; /* Ensure vertical scrollbar appears when needed */
+
+    /* @apply bg-transparent focus:outline-green-400 focus:border-transparent; */
+    /* @apply bg-transparent focus:outline-2 focus:outline-blue-500/90; */
+    @apply bg-transparent grow;
+}
+.todoCard textarea:focus{
+    @apply outline outline-offset-4 outline-yellow-400 rounded-lg;
+}
+
+/* .todoCard textarea:hover{
+    @apply outline outline-offset-4 outline-green-100 rounded-lg;
+} */
+
+/* Customize the scrollbar */
+.todoCard textarea::-webkit-scrollbar {
+    width: 7px; /* Set the width of the scrollbar */
+}
+
+.todoCard textarea::-webkit-scrollbar-thumb {
+    background-color: #ffffff8c; /* Set the color of the scrollbar thumb */
+    border-radius: 10px; /* Optional: round the corners of the scrollbar thumb */
+}
+
+.todoCard textarea::-webkit-scrollbar-thumb:hover {
+    background-color: #ffffffe0; /* Set the color of the scrollbar thumb on hover */
+}
+
+
+
+#myNav{
+    box-shadow: inset 4em 3em 40px -30px rgb(121, 24, 138);
+    /* box-shadow: inset 4em 3em 40px -30px rgb(88, 17, 101); */
+    @apply flex justify-between bg-slate-900/40 border-2 border-slate-50 mx-5 rounded-2xl py-3 mt-3
+    text-gray-100 font-poppins-medium md:font-poppins-semibold text-base md:text-xl;
+    /* bg-slate-800 */
+}
+
+.my-line-through {
+    text-decoration: line-through;
+}
