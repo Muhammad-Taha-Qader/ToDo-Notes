@@ -1,12 +1,12 @@
 # To Do Notes
 Here is a mini project of To Do Notes.
-An optimized version of my previous ![ToDo](https://github.com/Muhammad-Taha-Qader/ToDo)
+An optimized version of my previous [ToDo](https://github.com/Muhammad-Taha-Qader/ToDo)
 
 ### Technologies:
 - HTML
 - CSS
 - Tailwind
-- JS, ES6
+- JS, ES6, TS
 
 ### Prerequisites:
 - Node v20.15.1 installed
