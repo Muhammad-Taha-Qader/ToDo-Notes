@@ -99,8 +99,8 @@ function createNewTodoItem(id, checked, text){
 // eslint-disable-next-line no-unused-vars
 function addNewTodoItem(){
     const isFirstCardEmpty=document.querySelector('.todoItem');
-    if(isFirstCardEmpty.querySelector('textarea').value==''){
-        alert('Hi! You already has a new ToDo iteam on top.');
+    if(isFirstCardEmpty!=null && isFirstCardEmpty.querySelector('textarea').value==''){
+        alert('Hi! You already has a new ToDo item on top.');
     }else{
         const id = `i${++itemsAvliableSoFar}`;
         const newTodoItem = createNewTodoItem(id, false, '');
