@@ -7,22 +7,6 @@ let currentTheme= Theme.LIGHT;
 let todoItems = [];
 let itemsAvliableSoFar;
 
-
-// Save to local storage
-// function saveTodos() {
-//     document.querySelectorAll('.todoItem').forEach((oneItem) => {
-//         const itemText = oneItem.querySelector('textarea');
-//         const checkbox = oneItem.querySelector('input[type="checkbox"]');
-//         if(itemText.value!='') // if don't use this, it will also store the 1st blank todoiteam that is showin to 1st user. 
-//             todoItems.push({
-//                 text: itemText.value,
-//                 checkbox: checkbox.checked,
-//                 id: checkbox.id
-//             });
-//     });
-//     localStorage.setItem('todoItems', JSON.stringify(todoItems));
-// }
-
 // Load from local storage
 function loadTodos() {
     const todoItems = JSON.parse(localStorage.getItem('todoItems')) || [];
@@ -30,7 +14,6 @@ function loadTodos() {
     todoItems.forEach(todo => {
         if(todo.text!=''){
             const newTodoItem=createNewTodoItem(`i${((i++)+1)}`, todo.checkbox, todo.text);
-            //const newTodoItem=createNewTodoItem(todo.id, todo.checkbox, todo.text);
             const newItemParent= todo.checkbox? document.querySelector('.todoItemChecked') : document.querySelector('.todoItemUnchecked') ;
             newItemParent.appendChild(newTodoItem);
             // itemsAvliableSoFar = Math.max(itemsAvliableSoFar, parseInt(todo.id.slice(1)));
@@ -55,7 +38,6 @@ function createNewTodoItem(id, checked, text){
     //Creat new textarea for iteam
     let newItemTextarea = document.createElement('textarea');
     newItemTextarea.setAttribute('data-for', id);
-    // newItemLable.textContent=`your ${itemsAvliableSoFar} task`;
     newItemTextarea.setAttribute('placeholder','Enter description...');
     newItemTextarea.value = text;
     newItemTextarea.setAttribute('oninput','autoResize(this)');
@@ -109,19 +91,7 @@ function addNewTodoItem(){
         const id = `i${++itemsAvliableSoFar}`;
         const newTodoItem = createNewTodoItem(id, false, '');
         //putting the div(new to do item) in our main todoIteams list/card
-        // document.getElementsByClassName("todoCard")[0].appendChild(newTodoItem);
-        //document.getElementsByClassName("todoItemUnchecked")[0].appendChild(newTodoItem);
         document.querySelector('.todoItemUnchecked').appendChild(newTodoItem);
-
-        //NO need now as previously new items were in todoCard so we have to reposition the add butoon but now every newiteam in in UNCKED div
-        // //But add button should go down the newly created iteam so:
-        // // Get the parent element
-        // let parent = newTodoItem.parentNode;  //Or let parent=document.getElementsByClassName("todoItemUnchecked")[0];
-        // //Insert the new item before button
-        // let btn=document.getElementById("addNewItemBtn");
-        // parent.insertBefore(newTodoItem,btn);
-        
-        //saveTodos();
         }
 }
 
@@ -129,9 +99,6 @@ function addNewTodoItem(){
 function removeCurrentTodoItem(myThis){
     const currentTodoIteam=myThis.parentNode;
     const parent=currentTodoIteam.parentNode;
-    // parent.removeChild(currentTodoIteam);
-    //saveTodos();
-
     //For Storing in JS
     //U can use .filter too
     // todoItems.forEach(item => {
@@ -158,7 +125,6 @@ function handleCheckboxChange(myThis){
     let parent=currentTodoIteam.parentNode; //parent==Check/Uncheck div
     if (myThis.checked) {
         parent.removeChild(currentTodoIteam);
-        console.log(currentTodoIteam);
         //document.getElementsByClassName("todoItemChecked")[0].appendChild(currentTodoIteam); // Will apend at bottom but we don't want that
         var todoItemCheckedDiv = document.getElementsByClassName('todoItemChecked')[0];
         todoItemCheckedDiv.insertBefore(currentTodoIteam, todoItemCheckedDiv.firstChild);        
@@ -166,8 +132,6 @@ function handleCheckboxChange(myThis){
         parent.removeChild(currentTodoIteam);
         document.getElementsByClassName('todoItemUnchecked')[0].appendChild(currentTodoIteam); 
     }
-    //saveTodos();
-
     //For Storing in JS
     // todoItems.forEach(item => {
     //         if(myThis.id==item.id){
@@ -178,7 +142,6 @@ function handleCheckboxChange(myThis){
         item.id == myThis.id ? { ...item, checkbox: myThis.checked } : item
     );
     localStorage.setItem('todoItems', JSON.stringify(todoItems));
-    
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -196,67 +159,12 @@ function autoResize(textarea) {
             console.log(todoItems);
         }
     }
-    // if(todoItems.length==0){
-    //     console.log('In ifffffff');
-    //     // const currentFirstItem= document.querySelector('.todoItem');  //app has only 1 empty item and we are rffering to it
-    //     // todoItems.push({ 
-    //     //     text: currentFirstItem.querySelector('textarea').value,
-    //     //     checkbox: , 
-    //     //     id: `i${++itemsAvliableSoFar}`
-    //     // });
 
-    //     //But we alredy know what values 1st by defult item has so
-    //     //const currentFirstItem= document.querySelector('.todoItem');  //app has only 1 empty item and we are rffering to it
-    //     todoItems.push({ 
-    //         text: '',
-    //         checkbox: false, 
-    //         id: textarea.getAttribute('data-for')
-    //     });
-    // }
-
-
-    //saveTodos();
-
-    //For Storing in JS
-    // if(todoItems.length==0){
-    //     const id = `i${++itemsAvliableSoFar}`;
-    //     const newTodoItem = createNewTodoItem(id, false, '');
-    //     document.querySelector('.todoItemUnchecked').appendChild(newTodoItem);
-      
-    // }else{
-    // todoItems.forEach(item => {
-    //     console.log(item);
-    //     if(textarea.getAttribute('data-for')==item.id){
-    //         item.querySelector('textarea').value=textarea.value;
-    //     }
-    // });
-    // }
-    
-    // todoItems.forEach(item => {
-    //     if(textarea.getAttribute('data-for')==item.id){
-    //         item.text =textarea.value;
-    //     }
-    // });
-
-
-    // console.log(todoItems);
-    // console.log(textarea);
-    // console.log(textarea.getAttribute('data-for'));
-    // todoItems = todoItems.map(item =>{
-    //     console.log(item.id);
-    //     console.log(textarea.getAttribute('data-for'));
-    //     console.log('T or F: ' + (item.id==textarea.getAttribute('data-for')));
-    //     console.log('item is: ');
-    //     console.log(item);
-    //     console.log({ ...item, text: textarea.value } );
-    //     item.id==textarea.getAttribute('data-for')? { ...item, text: textarea.value } : item;
-    // });
     const idToUpdate = textarea.getAttribute('data-for');
     const newText = textarea.value;
     todoItems = todoItems.map(item => 
         item.id === idToUpdate ? { ...item, text: newText } : item
     );
-
     localStorage.setItem('todoItems', JSON.stringify(todoItems));
 }
 
