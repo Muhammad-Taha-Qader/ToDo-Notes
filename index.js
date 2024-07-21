@@ -74,8 +74,12 @@ function createNewTodoItem(id, checked, text){
     newTodoItem.appendChild(newIteamdel);
 
     //For Storing in JS
-    todoItems.push({ text: text,
-        checkbox: checked, id: id});
+    // todoItems.push({ text: text,
+    //     checkbox: checked, id: id});
+    todoItems = [
+        ...todoItems,
+        { text: text, checkbox: checked, id: id }
+    ];    
     localStorage.setItem('todoItems', JSON.stringify(todoItems));
         //id should never be == todoItems.size at time to new creation of 
         //item as it might be possible that u have let say 6 items and u 
@@ -136,7 +140,11 @@ function removeCurrentTodoItem(myThis){
     //     }
     // });
     const idToDelete = myThis.getAttribute('data-for'); //id of del btn
+    // Filter out the item with the matching id and assign the result directly to todoItems
     todoItems = todoItems.filter(item => item.id != idToDelete);
+    //Can be done like this but not efficent:
+    // Filter out the item with the matching id and create a new array using the spread operator
+    //todoItems = [...todoItems.filter(item => item.id != idToDelete)];
     localStorage.setItem('todoItems', JSON.stringify(todoItems));
     parent.removeChild(currentTodoIteam);
 }
@@ -161,11 +169,14 @@ function handleCheckboxChange(myThis){
     //saveTodos();
 
     //For Storing in JS
-    todoItems.forEach(item => {
-            if(myThis.id==item.id){
-                item.checkbox=myThis.checked;
-            }
-        });
+    // todoItems.forEach(item => {
+    //         if(myThis.id==item.id){
+    //             item.checkbox=myThis.checked;
+    //         }
+    //     });
+    todoItems = todoItems.map(item => 
+        item.id == myThis.id ? { ...item, checkbox: myThis.checked } : item
+    );
     localStorage.setItem('todoItems', JSON.stringify(todoItems));
     
 }
@@ -182,6 +193,7 @@ function autoResize(textarea) {
                 checkbox: textarea.parentNode.querySelector('input[type="checkbox"]').checked, 
                 id: textarea.getAttribute('data-for')
             });
+            console.log(todoItems);
         }
     }
     // if(todoItems.length==0){
@@ -220,60 +232,50 @@ function autoResize(textarea) {
     // });
     // }
     
-    todoItems.forEach(item => {
-        if(textarea.getAttribute('data-for')==item.id){
-            item.text =textarea.value;
-        }
-    });
+    // todoItems.forEach(item => {
+    //     if(textarea.getAttribute('data-for')==item.id){
+    //         item.text =textarea.value;
+    //     }
+    // });
+
+
+    // console.log(todoItems);
+    // console.log(textarea);
+    // console.log(textarea.getAttribute('data-for'));
+    // todoItems = todoItems.map(item =>{
+    //     console.log(item.id);
+    //     console.log(textarea.getAttribute('data-for'));
+    //     console.log('T or F: ' + (item.id==textarea.getAttribute('data-for')));
+    //     console.log('item is: ');
+    //     console.log(item);
+    //     console.log({ ...item, text: textarea.value } );
+    //     item.id==textarea.getAttribute('data-for')? { ...item, text: textarea.value } : item;
+    // });
+    const idToUpdate = textarea.getAttribute('data-for');
+    const newText = textarea.value;
+    todoItems = todoItems.map(item => 
+        item.id === idToUpdate ? { ...item, text: newText } : item
+    );
+
     localStorage.setItem('todoItems', JSON.stringify(todoItems));
 }
 
 // eslint-disable-next-line no-unused-vars
 function resetAll(){
- localStorage.clear();
- loadTodos();
- // Refresh the page
-location.reload();
+    localStorage.clear();
+    loadTodos();
+    // Refresh the page
+    location.reload();
 }
 
-// function togalTheme(){
-//     let todoItemUnchecked=document.getElementsByClassName('todoItemUnchecked')[0];
-//     let todoItemChecked=document.getElementsByClassName('todoItemChecked')[0];
-//     todoItemUnchecked.classList.remove('bg-slate-500');
-//     todoItemUnchecked.classList.add('bg-purple-900');
-
-//     todoItemChecked.classList.remove('bg-green-400');
-//     todoItemChecked.classList.add('bg-fuchsia-900');
-
-//     // let myHtml= document.getElementsByTagName('html')[0];
-//     // myHtml.classList.remove('bg-gradient-to-r from-purple-950 to-fuchsia-900');
-//     // console.log(myHtml.classList);
-//     // myHtml.classList.add('bg-gradient-to-r', 'from-slate-800', 'to-slate-900');
-
-//     let myHtml = document.getElementsByTagName('html')[0];
-//     let classesToRemove = ['bg-gradient-to-r', 'from-purple-950', 'to-fuchsia-900'];
-//     classesToRemove.forEach(className => myHtml.classList.remove(className));
-//     console.log(myHtml.classList);
-//     myHtml.classList.add('bg-gradient-to-r', 'from-slate-800', 'to-slate-900');
-// }
 // eslint-disable-next-line no-unused-vars
 function togalTheme(){
     const todoItemUnchecked=document.getElementsByClassName('todoItemUnchecked')[0];
     const todoItemChecked=document.getElementsByClassName('todoItemChecked')[0];
-    const myHtml = document.getElementsByTagName('html')[0];
+    const myHtml = document.querySelector('html');
     let themeBtn= document.querySelector('#myNav button');
 
     if(currentTheme===Theme.LIGHT){
-        // todoItemUnchecked.classList.remove('bg-slate-500');
-        // todoItemUnchecked.classList.add('bg-purple-900');
-    
-        // todoItemChecked.classList.remove('bg-green-400');
-        // todoItemChecked.classList.add('bg-fuchsia-900');
-
-        // let myHtml= document.getElementsByTagName('html')[0];
-        // myHtml.classList.remove('bg-gradient-to-r from-purple-950 to-fuchsia-900');
-        // console.log(myHtml.classList);
-        // myHtml.classList.add('bg-gradient-to-r', 'from-slate-800', 'to-slate-900');
         const classesToRemove = ['bg-gradient-to-r', 'from-purple-950', 'to-fuchsia-900'];
         classesToRemove.forEach(className => myHtml.classList.remove(className));
         console.log(myHtml.classList);
@@ -305,7 +307,6 @@ function togalTheme(){
         currentTheme=Theme.LIGHT;
     }
 }
-
 
 function reConfigInitId(item){
     const id = `i${++itemsAvliableSoFar}`;
