@@ -61,10 +61,4 @@ An optimized version of my previous [ToDo](https://github.com/Muhammad-Taha-Qade
             },
             "include": ["src/**/*.ts"],
             "exclude": ["node_modules"]
-            }
-            ```
-        
-
-
-
-
+            } ```
