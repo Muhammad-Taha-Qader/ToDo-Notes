@@ -82,7 +82,7 @@ function createNewTodoItem(id, checked, text){
     return newTodoItem;
 }
 
-// eslint-disable-next-line no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function addNewTodoItem(){
     const isFirstCardEmpty=document.querySelector('.todoItem');
     if(isFirstCardEmpty!=null && isFirstCardEmpty.querySelector('textarea').value==''){
@@ -95,7 +95,7 @@ function addNewTodoItem(){
         }
 }
 
-// eslint-disable-next-line no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function removeCurrentTodoItem(myThis){
     const currentTodoIteam=myThis.parentNode;
     const parent=currentTodoIteam.parentNode;
@@ -116,7 +116,7 @@ function removeCurrentTodoItem(myThis){
     parent.removeChild(currentTodoIteam);
 }
 
-// eslint-disable-next-line no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function handleCheckboxChange(myThis){
     let currentTodoIteam=myThis.parentNode;
     if(myThis.id == 'i999998'){
@@ -144,7 +144,7 @@ function handleCheckboxChange(myThis){
     localStorage.setItem('todoItems', JSON.stringify(todoItems));
 }
 
-// eslint-disable-next-line no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function autoResize(textarea) {
     textarea.style.height = 'auto';
     textarea.style.height = (textarea.scrollHeight) + 'px';
@@ -168,7 +168,7 @@ function autoResize(textarea) {
     localStorage.setItem('todoItems', JSON.stringify(todoItems));
 }
 
-// eslint-disable-next-line no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function resetAll(){
     localStorage.clear();
     loadTodos();
@@ -176,7 +176,7 @@ function resetAll(){
     location.reload();
 }
 
-// eslint-disable-next-line no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function togalTheme(){
     const todoItemUnchecked=document.getElementsByClassName('todoItemUnchecked')[0];
     const todoItemChecked=document.getElementsByClassName('todoItemChecked')[0];
