@@ -1,71 +1,53 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-type bool = boolean; //making alias of boolean
-enum Theme{
-    LIGHT= 1,
-    DARK,  //infered =2 
-    DAKR_DEEP
+const Theme = {
+    LIGHT: 1,
+    DARK: 2,
+    DAKR_DEEP: 3
 };
-let currentTheme= Theme.LIGHT; //TS auto infer let currentTheme:Theme
-let todoItems: {text: string, checkbox: bool, id: string}[] = [];
-// type itemObj={
-//     text: string, checkbox: bool, id: string
-// };
-// let todoItems: itemObj[] = [];
-let itemsAvliableSoFar:number;
+let currentTheme= Theme.LIGHT;
+let todoItems = [];
+let itemsAvliableSoFar;
 
-function addNewTodoItem(): void{
-    const isFirstCardEmpty: HTMLDivElement | null=document.querySelector('.todoItem');
-    // if(isFirstCardEmpty!=null && isFirstCardEmpty.querySelector('textarea').value===''){
-    //     alert('Hi! You already has a new ToDo item on top.');
-    // }
-
-    // if(isFirstCardEmpty!==null ){
-    //     const textarea = isFirstCardEmpty.querySelector('textarea'); //infered: HTMLTextAreaElement|null
-    //     //if(isFirstCardEmpty.querySelector('textarea').value!==null && isFirstCardEmpty.querySelector('textarea').value==='')
-    //     if (textarea !== null && textarea.value === '') {
-    //         alert('Hi! You already have a new ToDo item on top.');
-    //     }
-    // }
-    if(isFirstCardEmpty!==null && isFirstCardEmpty.querySelector('textarea')!.value === ''){
-            alert('Hi! You already have a new ToDo item on top.');
-    }
-    else{
-        const id = `i${++itemsAvliableSoFar}`;
-        const newTodoItem = createNewTodoItem(id, false, ''); //infered: HTMLDivElement
-        //putting the div(new to do item) in our main todoIteams list/card
-        // document.querySelector('.todoItemUnchecked').appendChild(newTodoItem);
-        const todoItemUnchecked: HTMLDivElement|null =document.querySelector('.todoItemUnchecked');
-        todoItemUnchecked !== null? todoItemUnchecked.appendChild(newTodoItem) : null;
-    }
+// Load from local storage
+function loadTodos() {
+    const todoItems = JSON.parse(localStorage.getItem('todoItems')) || [];
+    let i=0; // so that id shouldn't keep gowing over the time the app is used
+    todoItems.forEach(todo => {
+        if(todo.text!=''){
+            const newTodoItem=createNewTodoItem(`i${((i++)+1)}`, todo.checkbox, todo.text);
+            const newItemParent= todo.checkbox? document.querySelector('.todoItemChecked') : document.querySelector('.todoItemUnchecked') ;
+            newItemParent.appendChild(newTodoItem);
+            // itemsAvliableSoFar = Math.max(itemsAvliableSoFar, parseInt(todo.id.slice(1)));
+        }
+    });
+    itemsAvliableSoFar=todoItems.length;//So that id don't get init to 1, in case alreday existing items are there
 }
 
-
-function createNewTodoItem(_id: string, _checked: bool, _text: string){ //infered return type:HTMLDivElement
+function createNewTodoItem(id, checked, text){
     //Creat new TodoItem div
-    const newTodoItem = document.createElement('div');
+    let newTodoItem = document.createElement('div');
     newTodoItem.className ='todoItem';
 
     //Creat new div's iteam chcek box
-    const newItemCheckbox = document.createElement('input');
-    newItemCheckbox.id=_id;
+    let newItemCheckbox = document.createElement('input');
+    newItemCheckbox.id=id;
     // newCheckbox.setAttribute('type', 'checkbox');  Or can use following
     newItemCheckbox.type = 'checkbox';
-    newItemCheckbox.checked=_checked;
+    newItemCheckbox.checked=checked;
     newItemCheckbox.setAttribute('onchange' , 'handleCheckboxChange(this)');
 
     //Creat new textarea for iteam
-    const newItemTextarea = document.createElement('textarea');
-    newItemTextarea.setAttribute('data-for', _id);
+    let newItemTextarea = document.createElement('textarea');
+    newItemTextarea.setAttribute('data-for', id);
     newItemTextarea.setAttribute('placeholder','Enter description...');
-    newItemTextarea.value = _text;
+    newItemTextarea.value = text;
     newItemTextarea.setAttribute('oninput','autoResize(this)');
 
     //Creat new del btn for iteam
-    const newIteamdel=document.createElement('button');
+    let newIteamdel=document.createElement('button');
     newIteamdel.setAttribute('onclick','removeCurrentTodoItem(this)');
     newIteamdel.innerHTML='<i class="fas fa-trash"></i>';
     newIteamdel.className='delBtn';
-    newIteamdel.setAttribute('data-for', _id);
+    newIteamdel.setAttribute('data-for', id);
 
 
     //Putting chcek box and labes inside the div that we created
@@ -78,7 +60,7 @@ function createNewTodoItem(_id: string, _checked: bool, _text: string){ //infere
     //     checkbox: checked, id: id});
     todoItems = [
         ...todoItems,
-        { text: _text, checkbox: _checked, id: _id }
+        { text: text, checkbox: checked, id: id }
     ];    
     localStorage.setItem('todoItems', JSON.stringify(todoItems));
         //id should never be == todoItems.size at time to new creation of 
@@ -100,19 +82,23 @@ function createNewTodoItem(_id: string, _checked: bool, _text: string){ //infere
     return newTodoItem;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function addNewTodoItem(){
+    const isFirstCardEmpty=document.querySelector('.todoItem');
+    if(isFirstCardEmpty!=null && isFirstCardEmpty.querySelector('textarea').value==''){
+        alert('Hi! You already has a new ToDo item on top.');
+    }else{
+        const id = `i${++itemsAvliableSoFar}`;
+        const newTodoItem = createNewTodoItem(id, false, '');
+        //putting the div(new to do item) in our main todoIteams list/card
+        document.querySelector('.todoItemUnchecked').appendChild(newTodoItem);
+        }
+}
 
-function removeCurrentTodoItem(myThis: HTMLButtonElement): void{
-    // const currentTodoIteam=myThis.parentNode;//infered ParentNode | null
-    // const parent=currentTodoIteam.parentNode; 
-    //TS will always give error that it can be null and we have to use if, alternative way is:
-    // const currentTodoItem = myThis.parentNode!;// '!' telling that myThis.parentNode always not null
-        const currentTodoItem = myThis.parentNode as HTMLDivElement;// $$$$Infered as ParentNode but more presizely parent node is a Div but TS can't recoganice that, so to enforce it we use 'as' when calling
-        //OR if(myThis.parentNode indtanceof HTMLDivElement) {currentTodoItem = myThis.parentNode}
-    const parent = currentTodoItem.parentNode!;
-    //  OR
-    // const currentTodoItem = myThis.parentNode;
-    // const parent = currentTodoItem?.parentNode; // '?' == if currentTodoItem has some value
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function removeCurrentTodoItem(myThis){
+    const currentTodoIteam=myThis.parentNode;
+    const parent=currentTodoIteam.parentNode;
     //For Storing in JS
     //U can use .filter too
     // todoItems.forEach(item => {
@@ -120,27 +106,27 @@ function removeCurrentTodoItem(myThis: HTMLButtonElement): void{
     //         todoItems.pop(element);
     //     }
     // });
-    const idToDelete: string = myThis.getAttribute('data-for')!; //id of del btn
+    const idToDelete = myThis.getAttribute('data-for'); //id of del btn
     // Filter out the item with the matching id and assign the result directly to todoItems
     todoItems = todoItems.filter(item => item.id != idToDelete);
     //Can be done like this but not efficent:
     // Filter out the item with the matching id and create a new array using the spread operator
     //todoItems = [...todoItems.filter(item => item.id != idToDelete)];
     localStorage.setItem('todoItems', JSON.stringify(todoItems));
-    parent.removeChild(currentTodoItem);
+    parent.removeChild(currentTodoIteam);
 }
 
-
-function handleCheckboxChange(myThis: HTMLInputElement){
-    const currentTodoIteam=myThis.parentNode!;
-    if(myThis.id === 'i999998'){
-        reConfigInitId(currentTodoIteam);
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function handleCheckboxChange(myThis){
+    let currentTodoIteam=myThis.parentNode;
+    if(myThis.id == 'i999998'){
+        reConfigInitId(myThis.parentNode);
     }
-    const parent=currentTodoIteam.parentNode!; //parent==Check/Uncheck div
+    let parent=currentTodoIteam.parentNode; //parent==Check/Uncheck div
     if (myThis.checked) {
         parent.removeChild(currentTodoIteam);
         //document.getElementsByClassName("todoItemChecked")[0].appendChild(currentTodoIteam); // Will apend at bottom but we don't want that
-        const todoItemCheckedDiv = document.getElementsByClassName('todoItemChecked')[0]; //$$$$$$$$$$$$$$ assign htmldivelement
+        var todoItemCheckedDiv = document.getElementsByClassName('todoItemChecked')[0];
         todoItemCheckedDiv.insertBefore(currentTodoIteam, todoItemCheckedDiv.firstChild);        
     }else{
         parent.removeChild(currentTodoIteam);
@@ -158,30 +144,17 @@ function handleCheckboxChange(myThis: HTMLInputElement){
     localStorage.setItem('todoItems', JSON.stringify(todoItems));
 }
 
-function reConfigInitId(item: ParentNode): void{
-    const id = `i${++itemsAvliableSoFar}`;
-    item.querySelector('input[type="checkbox"]')!.id=id;
-    item.querySelector('textarea')!.setAttribute('data-for',`${id}`);
-    item.querySelector('button')!.setAttribute('data-for',`${id}`);
-}
-
-
-function autoResize(textarea: HTMLTextAreaElement): void {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function autoResize(textarea) {
     textarea.style.height = 'auto';
     textarea.style.height = (textarea.scrollHeight) + 'px';
     if(textarea.getAttribute('data-for') == 'i999998'){
-        reConfigInitId(textarea.parentNode!);
+        reConfigInitId(textarea.parentNode);
         if(textarea.value.length==1){
-            // const tempCheckBox=textarea.parentNode!.querySelector('input[type="checkbox"]') as HTMLInputElement; //$$$$$By default 'textarea.parentNode' inferd as parentNote but should be HTMLDiv, '.querySelector('input[type="checkbox"]')' ifered as Element
-            const tempP=textarea.parentNode as HTMLDivElement;
-            const tempCheckBox=tempP.querySelector('input[type="checkbox"]') as HTMLInputElement; 
             todoItems.push({ 
                 text: '',
-                // checkbox: textarea.parentNode!.querySelector('input[type="checkbox"]')!.checked,
-                //checkbox: textarea.parentNode!.(querySelector('input[type="checkbox"]') as HTMLInputElement).checked, 
-                checkbox: tempCheckBox.checked, 
-
-                id: textarea.getAttribute('data-for')!
+                checkbox: textarea.parentNode.querySelector('input[type="checkbox"]').checked, 
+                id: textarea.getAttribute('data-for')
             });
             console.log(todoItems);
         }
@@ -195,8 +168,7 @@ function autoResize(textarea: HTMLTextAreaElement): void {
     localStorage.setItem('todoItems', JSON.stringify(todoItems));
 }
 
-
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function resetAll(){
     localStorage.clear();
     loadTodos();
@@ -205,11 +177,11 @@ function resetAll(){
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function togalTheme():void{
+function togalTheme(){
     const todoItemUnchecked=document.getElementsByClassName('todoItemUnchecked')[0];
     const todoItemChecked=document.getElementsByClassName('todoItemChecked')[0];
-    const myHtml = document.querySelector('html')!;
-    const themeBtn:HTMLButtonElement= document.querySelector('#myNav button')!;
+    const myHtml = document.querySelector('html');
+    let themeBtn= document.querySelector('#myNav button');
 
     if(currentTheme===Theme.LIGHT){
         const classesToRemove = ['bg-gradient-to-r', 'from-purple-950', 'to-fuchsia-900'];
@@ -244,25 +216,11 @@ function togalTheme():void{
     }
 }
 
-function loadTodos():void {
-    // const todoItems = JSON.parse(localStorage.getItem('todoItems')) || [];
-    const tempItems: string | null= localStorage.getItem('todoItems');
-    // const todoItems = tempItems===null? JSON.parse(tempItems) : [];
-    let todoItems: {text: string, checkbox: bool, id: string}[] = [];
-    if(tempItems)
-        todoItems = JSON.parse(tempItems);
-
-    let i=0; // so that id shouldn't keep gowing over the time the app is used
-    todoItems.forEach(todo => {
-        if(todo.text!=''){
-            const newTodoItem=createNewTodoItem(`i${((i++)+1)}`, todo.checkbox, todo.text);
-            const newItemParent= todo.checkbox? document.querySelector('.todoItemChecked') : document.querySelector('.todoItemUnchecked') ;
-            newItemParent!.appendChild(newTodoItem);
-            // itemsAvliableSoFar = Math.max(itemsAvliableSoFar, parseInt(todo.id.slice(1)));
-        }
-    });
-    itemsAvliableSoFar=todoItems.length;//So that id don't get init to 1, in case alreday existing items are there
+function reConfigInitId(item){
+    const id = `i${++itemsAvliableSoFar}`;
+    item.querySelector('input[type="checkbox"]').id=id;
+    item.querySelector('textarea').setAttribute('data-for',`${id}`);
+    item.querySelector('button').setAttribute('data-for',`${id}`);
 }
-
 // Load todos when the page loads
 window.onload = loadTodos;

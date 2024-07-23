@@ -25,8 +25,9 @@ An optimized version of my previous [ToDo](https://github.com/Muhammad-Taha-Qade
         - Install ESLint v3.0.10 VSCode plugin by Microsoft
         - npm install eslint -g OR npm install eslint
         - eslint --init OR npx eslint --init
-        - You might want to include the following in your eslint.config.mjs:
-        ``` export default [
+        - You might want to include the following in your eslint.config.mjs WITH-OUT-TS:
+        ``` 
+        export default [
             {
                 files: ["**/*.js"],
                 languageOptions: {sourceType: "commonjs"},
@@ -39,6 +40,23 @@ An optimized version of my previous [ToDo](https://github.com/Muhammad-Taha-Qade
             pluginJs.configs.recommended,
         ]; 
         ```
+        WITH-TS
+        ```
+        export default [
+        {
+            files: ['**/*.{js,mjs,cjs,ts}'],
+            languageOptions: {sourceType: 'commonjs'},
+            rules: {
+                'quotes': ['error', 'single'], // Enforce single quotes
+                'semi': ['error', 'always'] // Require semicolons
+            }
+        },
+        {files: ['**/*.js'], languageOptions: {sourceType: 'commonjs'}},
+        {languageOptions: { globals: globals.browser }},
+        pluginJs.configs.recommended,
+        ...tseslint.configs.recommended,
+        ];
+        ```
 - Tailwind
     - Follow https://tailwindcss.com/docs/installation for installation
 - TS 5.5.3
@@ -48,7 +66,8 @@ An optimized version of my previous [ToDo](https://github.com/Muhammad-Taha-Qade
         - At this point you will be able to use TS without init it in your project, by ``` tsc index.ts ``` it will create ``` index.js ``` in current dir.
         - To get full power of TS and custom config ``` tsc --init ```
         - tscongig.json:
-        ``` {
+        ``` 
+        {
             "compilerOptions": {
                 "target": "es2016",
                 "module": "commonjs",
@@ -61,4 +80,5 @@ An optimized version of my previous [ToDo](https://github.com/Muhammad-Taha-Qade
             },
             "include": ["src/**/*.ts"],
             "exclude": ["node_modules"]
-            } ```
+        } 
+        ```
